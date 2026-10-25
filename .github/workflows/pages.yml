@@ -27,7 +27,6 @@ jobs:
           path: dist
 
   deploy:
-    if: github.event_name == 'workflow_dispatch'
     needs: build
     runs-on: ubuntu-latest
     permissions:
