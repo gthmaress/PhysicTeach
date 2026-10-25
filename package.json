@@ -1,0 +1,11 @@
+{
+  "name": "physicteach",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Физика: подготовка к коллоквиуму без регистрации",
+  "scripts": {
+    "build": "node prepare.mjs",
+    "dev": "node server.mjs"
+  },
+  "engines": { "node": ">=20" }
+}

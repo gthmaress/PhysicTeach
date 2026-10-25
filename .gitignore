@@ -1,0 +1,8 @@
+/package/
+/*.tgz
+/*.tar.gz
+/qa-*.json
+/qa-*.png
+/qa-*.jpg
+/dist/Механика-офлайн.html
+/dist/study-*.js
