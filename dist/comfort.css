@@ -1,0 +1,51 @@
+/* Finishing touches for learning controls and small screens. */
+.card-controls{display:grid;grid-template-columns:1.8fr 1.1fr 1fr auto;gap:14px;align-items:end;margin:25px 0 12px}
+.card-controls label,.topic-filter label{font-size:13px;font-weight:700;color:var(--muted)}
+.card-controls label{display:grid;gap:7px;min-width:0}
+.card-controls select,.topic-filter select{width:100%;min-width:0;border:1px solid var(--line);background:var(--white);color:var(--ink);border-radius:15px;padding:11px 12px;font:14px var(--sans)}
+.card-controls .btn{min-height:43px;white-space:nowrap}
+.topic-filter{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:-4px 0 23px}
+.topic-filter select{width:auto;min-width:170px}
+.topic-filter .small{margin-left:auto}
+.stat-action{appearance:none;text-align:left;text-decoration:none;color:var(--ink);background:none;border:0;border-left:1px solid var(--line);border-radius:0;padding:0 0 0 22px;font:inherit;cursor:pointer}
+.stat-action:hover strong,.stat-action:hover span{color:var(--green)}
+.stat-action strong{display:block}
+.draft-clear{border:0;background:transparent;color:var(--muted);font:12px var(--sans);text-decoration:underline;text-underline-offset:3px;padding:6px 0;min-height:32px}
+.draft-clear:hover{color:var(--green)}
+.oral-summary-actions{display:flex;gap:15px 24px;flex-wrap:wrap;margin-top:17px;font-size:13px;font-weight:700}
+.oral-summary-actions a{text-decoration:none}
+.practice-grade .btn[aria-pressed=true]{box-shadow:0 0 0 3px #8ba67c55;border-color:var(--green)}
+.inline-math{display:inline-block;max-width:100%;overflow-x:auto;overflow-y:hidden;vertical-align:middle}
+.practice-group{scroll-margin-top:16px}
+.flash-progress{align-items:center;gap:12px;flex-wrap:wrap}
+.flash-card .eyebrow{line-height:1.7}
+.flash-card h2{overflow-wrap:anywhere}
+body.drawer-open{overflow:hidden}
+@media(max-width:1150px){.card-controls{grid-template-columns:1fr 1fr}.card-controls .btn{justify-self:start}}
+@media(max-width:900px){
+ .topbar{display:grid;grid-template-columns:1fr auto;gap:0 12px;padding:8px 20px 10px}
+ .menu-btn{justify-self:start;margin:0;min-height:36px}
+ .top-extra{margin:0;padding:0;align-self:center}
+ .topnav{grid-row:2;grid-column:1/-1;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));width:100%;padding:8px 0 0;gap:4px}
+ .topnav a{justify-content:center;padding:7px 4px;min-height:38px;font-size:11px}
+}
+@media(max-width:600px){
+ .topbar{padding:8px 16px 10px}
+ .topnav{grid-template-columns:repeat(3,minmax(0,1fr))}
+ .topnav a{min-height:38px}
+ .card-controls{gap:12px}
+ .card-controls label:first-child{grid-column:1/-1}
+ .card-controls .btn{grid-column:1/-1;justify-self:stretch}
+ .topic-filter{gap:9px}
+ .topic-filter label{width:100%}
+ .topic-filter select{flex:1;min-width:0}
+ .stat-action{padding-left:0;border:0}
+ .stat-action+.stat-action{padding-left:18px;border-left:1px solid var(--line)}
+ .oral-summary-actions{display:grid;gap:10px}
+ html{scroll-padding-top:160px}
+ .practice-group{scroll-margin-top:16px}
+}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
+@media print{.card-controls,.topic-filter,.draft-clear,.oral-summary-actions{display:none}body.drawer-open{overflow:visible}}
+
+.card-settings{border:1px solid var(--line);background:var(--white);border-radius:20px;padding:13px 18px;margin-top:20px;font-size:13px}.card-settings>summary{cursor:pointer;font-weight:700;color:var(--green);line-height:1.8}.card-settings .card-controls{margin-top:18px}.card-settings .tip{margin-bottom:2px}.card-settings[open]{padding-bottom:18px}.empty .btn{margin-top:17px}

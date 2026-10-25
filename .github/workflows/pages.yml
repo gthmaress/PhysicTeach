@@ -21,7 +21,9 @@ jobs:
         with:
           node-version: '22'
       - name: Validate materials and build
-        run: node prepare.mjs
+        run: |
+          node --test tests/study.test.mjs
+          node prepare.mjs
       - uses: actions/upload-pages-artifact@v4
         with:
           path: dist
