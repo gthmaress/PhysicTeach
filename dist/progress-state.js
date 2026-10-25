@@ -6,7 +6,7 @@ const StudyState = (() => {
   const d=new Date(value+'T12:00:00');
   return Number.isFinite(+d) && `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`===value;
  };
- const create = courses => ({version:1,course:courses[0].id,progress:{},cards:{},plans:{},last:{},lastSections:{},practice:{},practiceRuleVersion:1,drafts:{},largeText:false});
+ const create = courses => ({version:1,course:courses[0].id,progress:{},cards:{},plans:{},last:{},lastSections:{},practice:{},practiceRuleVersion:1,drafts:{},quizAnswers:{},largeText:false});
  const valid = s => record(s) && s.version===1 && ['progress','cards','plans','last'].every(key=>record(s[key]));
  function normalize(input,courses){
   const clean=create(courses);
@@ -34,6 +34,15 @@ const StudyState = (() => {
      }
     }
     if(input.practiceRuleVersion!==1&&ids.length&&ids.every(id=>clean.practice[`${key}:${id}`]==='done'))clean.progress[key]=3;
+    for(const q of (c.quizzes||[]).filter(q=>q.topicId===t.id)){
+     const answer=record(input.quizAnswers)?input.quizAnswers[c.id+':'+q.id]:null;
+     if(record(answer)&&q.options.some(o=>o.id===answer.choice)){
+      const normalized={choice:answer.choice};if(date(answer.answeredAt))normalized.answeredAt=answer.answeredAt;
+      clean.quizAnswers[c.id+':'+q.id]=normalized;
+     }
+     const draftKey=`${key}:quiz-${q.id}`,draft=record(input.drafts)?input.drafts[draftKey]:null;
+     if(typeof draft==='string'&&draft)clean.drafts[draftKey]=draft.slice(0,6000);
+    }
    }
    const p=input.plans[c.id];
    if(record(p)&&date(p.start)&&Number.isInteger(p.days)&&p.days>=3&&p.days<=60)clean.plans[c.id]={start:p.start,days:p.days};

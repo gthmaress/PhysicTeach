@@ -9,10 +9,11 @@ const root=path.dirname(fileURLToPath(import.meta.url));
 const dir=path.join(root,'dist');
 const read=p=>fs.readFileSync(path.join(dir,p),'utf8');
 const katex=require(path.join(dir,'vendor/katex.min.js'));
-const sandbox={};vm.createContext(sandbox);vm.runInContext(read('content.js')+'\n'+read('learning.js')+'\n'+read('classroom.js')+'\nglobalThis.courses=COURSES;globalThis.classroom=CLASSROOM;',sandbox);
+const sandbox={};vm.createContext(sandbox);vm.runInContext(read('content.js')+'\n'+read('learning.js')+'\n'+read('classroom.js')+'\n'+read('quizzes.js')+'\n'+read('quiz-engine.js')+'\nglobalThis.courses=COURSES;globalThis.classroom=CLASSROOM;globalThis.quizLogic=QuizLogic;',sandbox);
 let formulas=0,steps=0,questions=0,practice=0,oralCriteria=0;
 const ids=new Set();
 for(const c of sandbox.courses){
+ sandbox.quizLogic.validate(c);
  if(ids.has(c.id))throw Error('Duplicate course '+c.id);ids.add(c.id);
  const topics=new Set();
  for(const t of c.topics){
@@ -43,7 +44,7 @@ let css=read('vendor/katex.min.css').replace(/url\((fonts\/[^)]+)\)/g,(_,name)=>
  return `url(data:${mime};base64,${fs.readFileSync(file).toString('base64')})`;
 });
 const safeScript=s=>s.replace(/<\/script/gi,'<\\/script');
-const bundle=['content.js','learning.js','classroom.js','progress-state.js','lesson-ui.js','app.js'].map(f=>read(f)).join('\n;\n');
+const bundle=['content.js','learning.js','classroom.js','quizzes.js','quiz-engine.js','progress-state.js','lesson-ui.js','quiz-ui.js','app.js'].map(f=>read(f)).join('\n;\n');
 const digest=createHash('sha256').update(bundle).digest('hex').slice(0,12);
 const bundleName=`study-${digest}.js`;
 fs.writeFileSync(path.join(dir,bundleName),bundle);
@@ -56,4 +57,4 @@ const warm=read('warm.css').replace(/url\(['"]?(vendor\/nunito\/[^)'"\s]+)['"]?\
 html=html.replace('<link rel="stylesheet" href="vendor/katex.min.css">',`<style>${css}</style>`).replace('<link rel="stylesheet" href="style.css">',`<style>${read('style.css')}</style>`).replace('<link rel="stylesheet" href="warm.css">',`<style>${warm}</style>`).replace('<link rel="stylesheet" href="comfort.css">',`<style>${read('comfort.css')}</style>`);
 html=html.replace('</body>',`<script>window.OFFLINE_BUILD=true;</script><script>${safeScript(read('vendor/katex.min.js'))}</script><script>${safeScript(bundle)}</script></body>`);
 fs.writeFileSync(path.join(dir,'Механика-офлайн.html'),html);
-console.log(JSON.stringify({courses:sandbox.courses.length,topics:sandbox.courses.reduce((n,c)=>n+c.topics.length,0),diagrams:Object.keys(sandbox.classroom).length,formulas,derivationSteps:steps,originalQuestions:questions,newWorkedExercises:practice,totalQuestions:questions+practice,oralCriteria,bundle:bundleName,offlineBytes:Buffer.byteLength(html),result:'All explanations mapped, all KaTeX expressions passed'}));
+console.log(JSON.stringify({courses:sandbox.courses.length,topics:sandbox.courses.reduce((n,c)=>n+c.topics.length,0),testQuestions:sandbox.courses.reduce((n,c)=>n+c.quizzes.length,0),diagrams:Object.keys(sandbox.classroom).length,formulas,derivationSteps:steps,originalQuestions:questions,newWorkedExercises:practice,totalQuestions:questions+practice,oralCriteria,bundle:bundleName,offlineBytes:Buffer.byteLength(html),result:'All explanations mapped, all KaTeX expressions passed'}));
