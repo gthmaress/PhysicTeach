@@ -7,7 +7,8 @@ const ICONS={arrow:'M4 12h16m-6-6 6 6-6 6',book:'M4 4h6a2 2 0 0 1 2 2v14a3 3 0 0
 const icon=(name,size=18)=>`<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="${ICONS[name]||ICONS.book}"/></svg>`;
 let mathFailures=[];
 function math(tex,display=false){try{if(!window.katex)throw new Error('KaTeX unavailable');return katex.renderToString(tex,{displayMode:display,throwOnError:true,strict:'ignore',trust:false,output:'htmlAndMathml'});}catch(e){mathFailures.push({tex,error:e.message});return `<span class="math-error">${esc(tex)}</span>`;}}
-function rich(text){return String(text).split(/(\\\([\s\S]*?\\\))/g).map(s=>s.startsWith('\\(')?`<span class="inline-math">${math(s.slice(2,-2))}</span>`:s.split(/([A-Za-zА-Яа-я]⃗)/g).map(part=>/^[A-Za-zА-Яа-я]⃗$/.test(part)?`<span class="inline-math">${math('\\vec{'+part[0]+'}')}</span>`:esc(part)).join('')).join('');}
+const vectorLetters={'ω':'\\omega','ε':'\\varepsilon','φ':'\\varphi'};
+function rich(text){return String(text).split(/(\\\([\s\S]*?\\\))/g).map(s=>s.startsWith('\\(')?`<span class="inline-math">${math(s.slice(2,-2))}</span>`:s.split(/([A-Za-zА-Яа-яωεφ]⃗)/g).map(part=>/^[A-Za-zА-Яа-яωεφ]⃗$/.test(part)?`<span class="inline-math">${math('\\vec{'+(vectorLetters[part[0]]||part[0])+'}')}</span>`:esc(part)).join('')).join('');}
 const KEY='colloquium.study.video.v1';
 const today=()=>{const d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;};
 const localDate=s=>new Date(s+'T12:00:00');

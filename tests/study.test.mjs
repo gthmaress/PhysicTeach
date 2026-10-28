@@ -185,6 +185,27 @@ test('a test error marks the topic for review',()=>{
  app.click('[data-quiz-submit]');assert.equal(app.run("state.progress['mechanics-video:m02']"),2);
 });
 
+test('a wrong choice is labelled separately from the correct answer',()=>{
+ const app=appFixture();app.context.location.hash='#tests/m01';app.run("startQuiz('m01')");
+ const wrong=app.run("course().quizzes[0].options.find(o=>o.id!==course().quizzes[0].correct).id");
+ app.choice(wrong);app.click('[data-quiz-submit]');
+ const html=app.element('#main').innerHTML;
+ assert.equal((html.match(/class="quiz-option[^\"]*incorrect/g)||[]).length,1);
+ assert.equal((html.match(/class="quiz-option[^\"]*correct /g)||[]).length,1);
+ assert.match(html,/Ваш ответ — неверно/);assert.match(html,/Правильный ответ/);
+});
+
+test('displacement, oscillator coordinates and signed rotation stay unambiguous',()=>{
+ const topic=id=>courses[0].topics.find(t=>t.id===id);
+ assert.match(JSON.stringify(topic('m01').definitions),/dS⃗/);
+ assert.match(topic('m19').formulas[0][0],/x=A/);
+ assert.doesNotMatch(topic('m19').formulas.map(f=>f[0]).join(' '),/dS|S=A/);
+ assert.match(topic('m11').learning.formulaGuides[0].why,/знаков/);
+ assert.match(topic('m15').learning.formulaGuides[2].when,/из покоя/);
+ assert.match(source('lesson-ui.js'),/<strong>Условия:<\/strong>/);
+ assert.match(source('lesson-ui.js'),/<strong>Почему:<\/strong>/);
+});
+
 test('short card sessions stay in the selected topic and retry only failed cards',()=>{
  const app=appFixture();app.context.location.hash='#cards/m18';app.run("makeDeck('all','m18',10)");
  assert.ok(app.run("flash.deck.every(c=>c.t.id==='m18')"));assert.equal(app.run('flash.deck.length'),Math.min(10,courses[0].topics.find(t=>t.id==='m18').questions.length));
