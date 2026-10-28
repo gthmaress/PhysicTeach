@@ -1,4 +1,6 @@
 /* Four learning modes, one readable content column. */
+.page-title,.article-body h2,.formula-name,.oral-card h2{overflow-wrap:anywhere}.formula-condition,.formula-why{margin-top:14px}
+.lesson-svg{display:block;width:100%;height:auto;min-width:440px}.classroom-scene figure{overflow-x:auto}
 .shell{display:block;min-height:100vh}.workspace{min-height:100vh}
 .topbar{display:grid;grid-template-columns:auto 1fr auto;gap:32px;min-height:82px;height:auto;padding:13px clamp(20px,4vw,60px);align-items:center;position:sticky;top:0}
 .brand{padding:0;gap:10px}.brand-mark{width:38px;height:38px;border-radius:14px;font-size:28px}.brand strong{font-size:18px}.brand small{font-size:12px}
